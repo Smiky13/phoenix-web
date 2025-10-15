@@ -6,7 +6,9 @@ document.getElementById("root").innerHTML = `
 
 document.getElementById("enter").addEventListener("click", async () => {
   try {
-    const res = await fetch(import.meta.env.VITE_API_URL + "/health");
+    const base = import.meta?.env?.VITE_API_URL || ""; // sécurité si variable absente
+    const res = await fetch(base + "/health");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const json = await res.json();
     document.getElementById("status").textContent = "API répond: " + JSON.stringify(json);
   } catch (e) {
