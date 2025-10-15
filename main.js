@@ -1,4 +1,4 @@
-document.getElementById("root").innerHTML = `
+ document.getElementById("root").innerHTML = `
   <h1>Accueil Phoenix</h1>
   <button id="enter">Entrer</button>
   <div id="status"></div>
