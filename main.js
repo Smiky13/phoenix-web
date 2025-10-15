@@ -5,13 +5,24 @@ document.getElementById("root").innerHTML = `
 `;
 
 document.getElementById("enter").addEventListener("click", async () => {
+  const status = document.getElementById("status");
   try {
-    const base = import.meta?.env?.VITE_API_URL || ""; // sécurité si variable absente
-    const res = await fetch(base + "/health");
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const base = import.meta.env.VITE_API_URL;
+    if (!base) {
+      status.textContent = "Erreur: VITE_API_URL est vide ou non définie.";
+      return;
+    }
+    const url = base + "/health";
+    status.textContent = "Appel en cours: " + url;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      status.textContent = `Erreur: HTTP ${res.status} sur ${url}`;
+      return;
+    }
     const json = await res.json();
-    document.getElementById("status").textContent = "API répond: " + JSON.stringify(json);
+    status.textContent = "API répond: " + JSON.stringify(json);
   } catch (e) {
-    document.getElementById("status").textContent = "Erreur: " + e.message;
+    status.textContent = "Erreur réseau: " + e.message;
   }
 });
